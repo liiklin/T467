@@ -45,6 +45,7 @@ if (TARGET_ENV === 'development') {
   module.exports = merge(commonConfig, {
     entry: [
       'webpack-dev-server/client?http://localhost:8080',
+      'bootstrap-loader',
       path.join(__dirname, 'static/index.js')
     ],
     devServer: {
@@ -72,6 +73,7 @@ if (TARGET_ENV === 'production') {
   console.log('Building for prod...');
   module.exports = merge(commonConfig, {
     entry: [
+      'bootstrap-loader',
       path.join(__dirname, 'static/index.js')
     ],
     module: {
