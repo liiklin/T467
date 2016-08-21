@@ -1,3 +1,9 @@
-node_modules
+.DS_Store
 elm-stuff
-dist
+node_modules
+elm.js
+documentation.json
+.vscode/tasks.json
+npm-debug.log
+.envrc
+tests.js
