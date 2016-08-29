@@ -3,29 +3,18 @@ module Routing.Config exposing (..)
 import Hop.Types exposing (Config, Location, Query, Router, PathMatcher, newLocation)
 import Hop.Matchers exposing (..)
 import Models exposing (..)
-import Languages.Routing.Config
 import Faqs.Routing.Config
-import Notifys.Routing.Config
+import Notifies.Routing.Config
 
 
-matcherHome : PathMatcher Route
-matcherHome =
-    match1 HomeRoute ""
+matchersDefault : PathMatcher Route
+matchersDefault =
+    nested1 NotifiesRoutes "" Notifies.Routing.Config.matchers
 
 
-matcherAbout : PathMatcher Route
-matcherAbout =
-    match1 AboutRoute "/about"
-
-
-matchersLanguages : PathMatcher Route
-matchersLanguages =
-    nested1 LanguagesRoutes "/languages" Languages.Routing.Config.matchers
-
-
-matchersNotifys : PathMatcher Route
-matchersNotifys =
-    nested1 NotifysRoutes "/notifys" Notifys.Routing.Config.matchers
+matchersNotifies : PathMatcher Route
+matchersNotifies =
+    nested1 NotifiesRoutes "/notifications" Notifies.Routing.Config.matchers
 
 
 matchersFaqs : PathMatcher Route
@@ -35,17 +24,15 @@ matchersFaqs =
 
 matchers : List (PathMatcher Route)
 matchers =
-    [ matcherHome
-    , matchersNotifys
+    [ matchersNotifies
     , matchersFaqs
-    , matcherAbout
-    , matchersLanguages
+    , matchersDefault
     ]
 
 
 config : Config Route
 config =
-    { basePath = ""
+    { basePath = "/notifications"
     , hash = True
     , matchers = matchers
     , notFound = NotFoundRoute

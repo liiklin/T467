@@ -6,9 +6,8 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (id, class, href, style)
 import Models exposing (..)
 import Messages exposing (..)
-import Languages.View
 import Faqs.View
-import Notifys.View
+import Notifies.View
 
 
 view : AppModel -> Html Msg
@@ -26,8 +25,8 @@ menu model =
     div [ class "row" ]
         [ div [ class "col-md-12" ]
             [ ul [ class "nav nav-pills" ]
-                [ menuLink ShowNotifys "btnNotify" "Notify" ""
-                , menuLink ShowFaqs "btnFaq" "Faq" ""
+                [ menuLink ShowNotifies "btnNotifies" "通知公告" ""
+                , menuLink ShowFaqs "btnFaq" "常见问题(FAQ)" ""
                 ]
             ]
         ]
@@ -48,29 +47,15 @@ menuLink message viewId label active =
 pageView : AppModel -> Html Msg
 pageView model =
     case model.route of
-        HomeRoute ->
-            div [ class "p2" ]
-                [ h1 [ id "title", class "m0" ] [ text "Home" ]
-                , div [] [ text "Click on Languages to start routing" ]
-                ]
-
-        AboutRoute ->
-            div [ class "p2" ]
-                [ h1 [ id "title", class "m0" ] [ text "About" ]
-                ]
-
-        NotifysRoutes notifysRoute ->
+        NotifiesRoutes notifiesRoute ->
             let
                 viewModel =
-                    { notifys = model.notifys
-                    , route = notifysRoute
+                    { notifies = model.notifies
+                    , route = notifiesRoute
                     , location = model.location
                     }
             in
-                div [ class "p2" ]
-                    [ h1 [ id "title", class "m0" ] [ text "Notifys" ]
-                    , Html.App.map NotifysMsg (Notifys.View.view viewModel)
-                    ]
+                Html.App.map NotifiesMsg (Notifies.View.view viewModel)
 
         FaqsRoutes faqsRoute ->
             let
@@ -80,23 +65,7 @@ pageView model =
                     , location = model.location
                     }
             in
-                div [ class "p2" ]
-                    [ h1 [ id "title", class "m0" ] [ text "Faqs" ]
-                    , Html.App.map FaqsMsg (Faqs.View.view viewModel)
-                    ]
-
-        LanguagesRoutes languagesRoute ->
-            let
-                viewModel =
-                    { languages = model.languages
-                    , route = languagesRoute
-                    , location = model.location
-                    }
-            in
-                div [ class "p2" ]
-                    [ h1 [ id "title", class "m0" ] [ text "Languages" ]
-                    , Html.App.map LanguagesMsg (Languages.View.view viewModel)
-                    ]
+                Html.App.map FaqsMsg (Faqs.View.view viewModel)
 
         NotFoundRoute ->
             notFoundView model
@@ -104,6 +73,4 @@ pageView model =
 
 notFoundView : AppModel -> Html msg
 notFoundView model =
-    div []
-        [ text "Not Found"
-        ]
+    div [ class "row" ] [ div [ class "col-md-12" ] [ span [] [ text "没有找到对应的页面" ] ] ]

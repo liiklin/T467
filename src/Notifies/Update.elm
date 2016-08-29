@@ -1,4 +1,4 @@
-module Languages.Update exposing (..)
+module Notifies.Update exposing (..)
 
 import Debug
 import Navigation
@@ -6,13 +6,13 @@ import Hop exposing (makeUrl, makeUrlFromLocation, addQuery, setQuery)
 import Hop.Types exposing (Config, Location)
 import Routing.Config
 import Models
-import Languages.Models exposing (..)
-import Languages.Messages exposing (Msg(..))
-import Languages.Routing.Utils
+import Notifies.Models exposing (..)
+import Notifies.Messages exposing (Msg(..))
+import Notifies.Routing.Utils
 
 
 type alias UpdateModel =
-    { languages : List Language
+    { notifies : List Notify
     , location : Location
     }
 
@@ -33,23 +33,23 @@ update message model =
         Show id ->
             let
                 path =
-                    Languages.Routing.Utils.reverseWithPrefix (Languages.Models.LanguageRoute id)
+                    Notifies.Routing.Utils.reverseWithPrefix (Notifies.Models.NotifyRoute id)
             in
                 ( model, navigationCmd path )
 
         Edit id ->
             let
                 path =
-                    Languages.Routing.Utils.reverseWithPrefix (Languages.Models.LanguageEditRoute id)
+                    Notifies.Routing.Utils.reverseWithPrefix (Notifies.Models.NotifyEditRoute id)
             in
                 ( model, navigationCmd path )
 
         Update id prop value ->
             let
-                udpatedLanguages =
-                    List.map (updateWithId id prop value) model.languages
+                udpatedNotifies =
+                    List.map (updateWithId id prop value) model.notifies
             in
-                ( { model | languages = udpatedLanguages }, Cmd.none )
+                ( { model | notifies = udpatedNotifies }, Cmd.none )
 
         AddQuery query ->
             let
@@ -72,7 +72,7 @@ update message model =
                 ( model, command )
 
 
-updateWithId : LanguageId -> String -> String -> Language -> Language
+updateWithId : NotifyId -> String -> String -> Notify -> Notify
 updateWithId id prop value language =
     if id == language.id then
         case prop of

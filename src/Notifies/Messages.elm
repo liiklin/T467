@@ -1,7 +1,7 @@
-module Notifys.Messages exposing (..)
+module Notifies.Messages exposing (..)
 
 import Dict
-import Notifys.Models exposing (..)
+import Notifies.Models exposing (..)
 import Hop.Types exposing (Config, Location, Query, Router, PathMatcher, newLocation)
 
 

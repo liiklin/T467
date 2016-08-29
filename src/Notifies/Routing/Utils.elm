@@ -1,11 +1,11 @@
-module Notifys.Routing.Utils exposing (..)
+module Notifies.Routing.Utils exposing (..)
 
 import Hop exposing (..)
 import Hop.Types exposing (Config)
 import Models
-import Notifys.Models exposing (..)
+import Notifies.Models exposing (..)
 import Routing.Config
-import Notifys.Routing.Config exposing (..)
+import Notifies.Routing.Config exposing (..)
 
 
 config : Config Models.Route
@@ -20,14 +20,14 @@ toS =
 
 reverseWithPrefix : Route -> String
 reverseWithPrefix route =
-    "/faq" ++ (reverse route)
+    "/notify" ++ (reverse route)
 
 
 reverse : Route -> String
 reverse route =
     case route of
-        NotifysRoute ->
-            matcherToPath matcherNotifys []
+        NotifiesRoute ->
+            matcherToPath matcherNotifies []
 
         NotifyRoute id ->
             matcherToPath matcherNotify [ toS id ]

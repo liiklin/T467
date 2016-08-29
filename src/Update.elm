@@ -8,10 +8,8 @@ import Messages exposing (..)
 import Models exposing (..)
 import Routing.Config
 import Routing.Utils
-import Languages.Update
-import Languages.Models
-import Notifys.Update
-import Notifys.Models
+import Notifies.Update
+import Notifies.Models
 import Faqs.Update
 import Faqs.Models
 
@@ -29,18 +27,6 @@ routerConfig =
 update : Msg -> AppModel -> ( AppModel, Cmd Msg )
 update message model =
     case Debug.log "message" message of
-        LanguagesMsg subMessage ->
-            let
-                updateModel =
-                    { languages = model.languages
-                    , location = model.location
-                    }
-
-                ( updatedModel, cmd ) =
-                    Languages.Update.update subMessage updateModel
-            in
-                ( { model | languages = updatedModel.languages }, Cmd.map LanguagesMsg cmd )
-
         FaqsMsg subMessage ->
             let
                 updateModel =
@@ -53,17 +39,17 @@ update message model =
             in
                 ( { model | faqs = updatedModel.faqs }, Cmd.map FaqsMsg cmd )
 
-        NotifysMsg subMessage ->
+        NotifiesMsg subMessage ->
             let
                 updateModel =
-                    { notifys = model.notifys
+                    { notifies = model.notifies
                     , location = model.location
                     }
 
                 ( updatedModel, cmd ) =
-                    Notifys.Update.update subMessage updateModel
+                    Notifies.Update.update subMessage updateModel
             in
-                ( { model | notifys = updatedModel.notifys }, Cmd.map NotifysMsg cmd )
+                ( { model | notifies = updatedModel.notifies }, Cmd.map NotifiesMsg cmd )
 
         SetQuery query ->
             let
@@ -75,31 +61,10 @@ update message model =
             in
                 ( model, command )
 
-        ShowHome ->
+        ShowNotifies ->
             let
                 path =
-                    Routing.Utils.reverse HomeRoute
-            in
-                ( model, navigationCmd path )
-
-        ShowLanguages ->
-            let
-                path =
-                    Routing.Utils.reverse (LanguagesRoutes Languages.Models.LanguagesRoute)
-            in
-                ( model, navigationCmd path )
-
-        ShowAbout ->
-            let
-                path =
-                    Routing.Utils.reverse AboutRoute
-            in
-                ( model, navigationCmd path )
-
-        ShowNotifys ->
-            let
-                path =
-                    Routing.Utils.reverse (NotifysRoutes Notifys.Models.NotifysRoute)
+                    Routing.Utils.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
             in
                 ( model, navigationCmd path )
 

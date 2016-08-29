@@ -1,13 +1,13 @@
-module Notifys.Routing.Config exposing (..)
+module Notifies.Routing.Config exposing (..)
 
 import Hop.Types exposing (Config, Location, Query, Router, PathMatcher, newLocation)
 import Hop.Matchers exposing (..)
-import Notifys.Models exposing (..)
+import Notifies.Models exposing (..)
 
 
-matcherNotifys : PathMatcher Route
-matcherNotifys =
-    match1 NotifysRoute ""
+matcherNotifies : PathMatcher Route
+matcherNotifies =
+    match1 NotifiesRoute ""
 
 
 matcherNotify : PathMatcher Route
@@ -22,4 +22,4 @@ matcherNotifyEdit =
 
 matchers : List (PathMatcher Route)
 matchers =
-    [ matcherNotifys, matcherNotify, matcherNotifyEdit ]
+    [ matcherNotifies, matcherNotify, matcherNotifyEdit ]

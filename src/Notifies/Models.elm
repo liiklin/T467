@@ -1,12 +1,12 @@
-module Languages.Models exposing (..)
+module Notifies.Models exposing (..)
 
 
-type alias LanguageId =
+type alias NotifyId =
     Int
 
 
-type alias Language =
-    { id : LanguageId
+type alias Notify =
+    { id : NotifyId
     , name : String
     , image : String
     , tags : List String
@@ -18,14 +18,14 @@ type alias Language =
 
 
 type Route
-    = LanguagesRoute
-    | LanguageRoute LanguageId
-    | LanguageEditRoute LanguageId
+    = NotifiesRoute
+    | NotifyRoute NotifyId
+    | NotifyEditRoute NotifyId
     | NotFoundRoute
 
 
-languages : List Language
-languages =
+notifies : List Notify
+notifies =
     [ { id = 1
       , name = "Elm"
       , image = "elm"

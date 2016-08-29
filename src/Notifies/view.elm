@@ -1,14 +1,14 @@
-module Faqs.View exposing (..)
+module Notifies.View exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Hop.Types exposing (Location)
-import Faqs.Models exposing (FaqId, Faq, Route, Route(..))
-import Faqs.Messages exposing (..)
+import Notifies.Models exposing (NotifyId, Notify, Route, Route(..))
+import Notifies.Messages exposing (..)
 
 
 type alias ViewModel =
-    { faqs : List Faq
+    { notifies : List Notify
     , location : Location
     , route : Route
     }
@@ -17,26 +17,28 @@ type alias ViewModel =
 view : ViewModel -> Html Msg
 view model =
     div []
-        [ div [ class "col-md-12" ] [ button [ class "btn btn-default" ] [ text "发布新FAQ" ] ]
+        [ div [ class "col-md-12" ] [ button [ class "btn btn-default" ] [ text "发布新通知" ] ]
         , div [ class "col-md-12", style [ ( "height", "20px" ) ] ] []
         , div [ class "col-md-12" ]
             [ Html.form [ class "form-horizontal", name "form" ]
                 [ div [ class "form-group" ]
-                    [ label [ for "question", class "col-md-2 control-label" ] [ text "问题：" ]
+                    [ label [ for "title", class "col-md-2 control-label" ] [ text "标题：" ]
                     , div [ class "col-md-10" ]
-                        [ input [ type' "text", class "form-control", id "question", placeholder "问题", required True ] []
+                        [ input [ type' "text", class "form-control", id "title", placeholder "通知标题", required True, pattern "^1[345678][0-9]{9}$" ] []
                         ]
                     ]
                 , div [ class "form-group" ]
-                    [ label [ for "priority", class "col-md-2 control-label" ] [ text "优先级：" ]
+                    [ label [ for "content", class "col-md-2 control-label" ] [ text "内容：" ]
                     , div [ class "col-md-10" ]
-                        [ input [ type' "number", class "form-control", id "priority", placeholder "优先级(整数)", required True ] []
+                        [ input [ type' "text", class "form-control", id "content", placeholder "通知内容", required True ] []
                         ]
                     ]
                 , div [ class "form-group" ]
-                    [ label [ for "answer", class "col-md-2 control-label" ] [ text "答案：" ]
+                    [ label [ class "col-md-2 control-label" ] [ text "置顶：" ]
                     , div [ class "col-md-10" ]
-                        [ textarea [ class "form-control", id "answer", placeholder "答案", rows 5, required True ] []
+                        [ div [ class "checkbox", style [ ( "padding-left", "20px" ) ] ]
+                            [ input [ type' "checkbox", checked True, required True ] []
+                            ]
                         ]
                     ]
                 ]
@@ -51,9 +53,8 @@ view model =
             [ table [ class "table table-hover" ]
                 [ thead []
                     [ tr []
-                        [ th [] [ text "问题" ]
-                        , th [] [ text "状态" ]
-                        , th [] [ text "优先级" ]
+                        [ th [] [ text "标题" ]
+                        , th [] [ text "置顶" ]
                         , th [] [ text "发布时间" ]
                         , th [] [ text "操作" ]
                         ]
@@ -61,12 +62,11 @@ view model =
                 , tbody []
                     [ tr []
                         [ td [] [ text "标题" ]
-                        , td [] [ span [ class "label label-success" ] [ text "已发布" ] ]
-                        , td [] [ text "1" ]
+                        , td [] [ span [ class "label label-success" ] [ text "已置顶" ] ]
                         , td [] [ text "2015-10-11" ]
                         , td []
                             [ div [ class "btn-group" ]
-                                [ button [ class "btn btn-default btn-xs" ] [ text "取消发布" ]
+                                [ button [ class "btn btn-default btn-xs" ] [ text "取消置顶" ]
                                 , button [ class "btn btn-default btn-xs" ] [ text "编辑" ]
                                 , button [ class "btn btn-danger btn-xs" ] [ text "删除" ]
                                 ]
@@ -74,12 +74,11 @@ view model =
                         ]
                     , tr []
                         [ td [] [ text "标题" ]
-                        , td [] [ span [ class "label label-warning" ] [ text "未发布" ] ]
-                        , td [] [ text "2" ]
+                        , td [] [ span [ class "label label-warning" ] [ text "未置顶" ] ]
                         , td [] [ text "2015-10-11" ]
                         , td []
                             [ div [ class "btn-group" ]
-                                [ button [ class "btn btn-default btn-xs" ] [ text "确定发布" ]
+                                [ button [ class "btn btn-default btn-xs" ] [ text "设置置顶" ]
                                 , button [ class "btn btn-default btn-xs" ] [ text "编辑" ]
                                 , button [ class "btn btn-danger btn-xs" ] [ text "删除" ]
                                 ]

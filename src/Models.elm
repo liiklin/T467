@@ -1,36 +1,32 @@
 module Models exposing (..)
 
 import Hop.Types exposing (Location, newLocation)
-import Languages.Models exposing (Language, languages)
 import Faqs.Models exposing (Faq, faqs)
-import Notifys.Models exposing (Notify, notifys)
+import Notifies.Models exposing (Notify, notifies)
 
 
 type Route
-    = HomeRoute
-    | AboutRoute
-    | NotifysRoutes Notifys.Models.Route
+    = NotifiesRoutes Notifies.Models.Route
     | FaqsRoutes Faqs.Models.Route
-    | LanguagesRoutes Languages.Models.Route
     | NotFoundRoute
 
 
 type alias AppModel =
-    { languages : List Language
-    , notifys : List Notify
+    { notifies : List Notify
     , faqs : List Faq
     , location : Location
     , route : Route
-    , selectedLanguage : Maybe Language
+    , selectedFaq : Maybe Faq
+    , selectedNotify : Maybe Notify
     }
 
 
 newAppModel : Route -> Hop.Types.Location -> AppModel
 newAppModel route location =
-    { languages = languages
-    , notifys = notifys
+    { notifies = notifies
     , faqs = faqs
     , location = location
     , route = route
-    , selectedLanguage = Maybe.Nothing
+    , selectedFaq = Maybe.Nothing
+    , selectedNotify = Maybe.Nothing
     }
