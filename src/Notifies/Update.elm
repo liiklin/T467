@@ -30,12 +30,15 @@ navigationCmd path =
 update : Msg -> UpdateModel -> ( UpdateModel, Cmd Msg )
 update message model =
     case Debug.log "message" message of
-        Show id ->
-            let
-                path =
-                    Notifies.Routing.Utils.reverseWithPrefix (Notifies.Models.NotifyRoute id)
-            in
-                ( model, navigationCmd path )
+        Add ->
+            ( model
+            , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifyAddRoute)
+            )
+
+        Cancel ->
+            ( model
+            , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifiesRoute)
+            )
 
         Edit id ->
             let
@@ -44,42 +47,81 @@ update message model =
             in
                 ( model, navigationCmd path )
 
+        Delete id ->
+            let
+                updatedNotifies =
+                    List.filter (\t -> t.id /= id) model.notifies
+            in
+                ( { model | notifies = updatedNotifies }
+                , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifiesRoute)
+                )
+
+        SetTop id ->
+            let
+                updatedNotifies =
+                    List.map (updatePinnedWithId id "pinned" True) model.notifies
+            in
+                ( { model | notifies = updatedNotifies }
+                , Cmd.none
+                )
+
+        CancelTop id ->
+            let
+                updatedNotifies =
+                    List.map (updatePinnedWithId id "pinned" False) model.notifies
+            in
+                ( { model | notifies = updatedNotifies }
+                , Cmd.none
+                )
+
         Update id prop value ->
             let
-                udpatedNotifies =
+                updatedNotifies =
                     List.map (updateWithId id prop value) model.notifies
             in
-                ( { model | notifies = udpatedNotifies }, Cmd.none )
+                ( { model | notifies = updatedNotifies }, Cmd.none )
 
-        AddQuery query ->
-            let
-                command =
-                    model.location
-                        |> addQuery query
-                        |> makeUrlFromLocation routerConfig
-                        |> Navigation.modifyUrl
-            in
-                ( model, command )
 
-        SetQuery query ->
-            let
-                command =
-                    model.location
-                        |> setQuery query
-                        |> makeUrlFromLocation routerConfig
-                        |> Navigation.modifyUrl
-            in
-                ( model, command )
+
+-- FormInput inputId val ->
+--     let
+--         res =
+--             case inputId of
+--                 Ltitle ->
+--                     { model | title = val }
+--
+--                 Lmessage ->
+--                     { model | message = val }
+--     in
+--         { res | errmsg = "" } ! []
+-- SaveAdd notify ->
+--     let
+--         updatedNotifies = {model.notifies | }
+--     in
+--         ( { model | notifies = updatedNotifies }, Cmd.none )
 
 
 updateWithId : NotifyId -> String -> String -> Notify -> Notify
-updateWithId id prop value language =
-    if id == language.id then
+updateWithId id prop value notify =
+    if id == notify.id then
         case prop of
-            "name" ->
-                { language | name = value }
+            "title" ->
+                { notify | title = value }
 
             _ ->
-                language
+                notify
     else
-        language
+        notify
+
+
+updatePinnedWithId : NotifyId -> String -> Bool -> Notify -> Notify
+updatePinnedWithId id prop value notify =
+    if id == notify.id then
+        case prop of
+            "pinned" ->
+                { notify | pinned = value }
+
+            _ ->
+                notify
+    else
+        notify

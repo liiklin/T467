@@ -6,8 +6,7 @@ import Notifies.Messages
 
 
 type Msg
-    = SetQuery Query
-    | FaqsMsg Faqs.Messages.Msg
+    = FaqsMsg Faqs.Messages.Msg
     | NotifiesMsg Notifies.Messages.Msg
     | ShowNotifies
     | ShowFaqs

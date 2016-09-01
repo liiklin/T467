@@ -1,8 +1,6 @@
 module Notifies.Messages exposing (..)
 
-import Dict
 import Notifies.Models exposing (..)
-import Hop.Types exposing (Config, Location, Query, Router, PathMatcher, newLocation)
 
 
 type alias Prop =
@@ -14,8 +12,17 @@ type alias Value =
 
 
 type Msg
-    = Show NotifyId
+    = Add
+    | Delete NotifyId
     | Edit NotifyId
+    | CancelTop NotifyId
+    | SetTop NotifyId
     | Update NotifyId Prop Value
-    | AddQuery (Dict.Dict String String)
-    | SetQuery (Dict.Dict String String)
+    | Cancel
+    -- | FormInput Field String
+    -- | FormCheck Field Bool
+
+
+
+-- | SaveAdd Notify
+-- | SaveEdit Notify

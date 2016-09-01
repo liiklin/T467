@@ -20,7 +20,7 @@ toS =
 
 reverseWithPrefix : Route -> String
 reverseWithPrefix route =
-    "/notify" ++ (reverse route)
+    "/notifications" ++ (reverse route)
 
 
 reverse : Route -> String
@@ -29,8 +29,8 @@ reverse route =
         NotifiesRoute ->
             matcherToPath matcherNotifies []
 
-        NotifyRoute id ->
-            matcherToPath matcherNotify [ toS id ]
+        NotifyAddRoute ->
+            matcherToPath matcherNotifyAdd []
 
         NotifyEditRoute id ->
             matcherToPath matcherNotifyEdit [ toS id ]

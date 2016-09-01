@@ -32,7 +32,7 @@ matchers =
 
 config : Config Route
 config =
-    { basePath = "/notifications"
+    { basePath = ""
     , hash = True
     , matchers = matchers
     , notFound = NotFoundRoute

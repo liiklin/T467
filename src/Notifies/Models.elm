@@ -5,11 +5,51 @@ type alias NotifyId =
     Int
 
 
+type alias Title =
+    String
+
+
+type alias Message =
+    String
+
+
+type alias Pinned =
+    Bool
+
+
+type Field
+    = Ltitle
+    | Lmessage
+    | Lpinned
+
+
+type alias NewNotify =
+    { title : Title
+    , message : Message
+    , pinned : Pinned
+    }
+
+
+
+-- type alias NewNotify =
+--     { id : NotifyId
+--     , title : String
+--     , message : String
+--     , created : String
+--     , pinned : Bool
+--     , archived : Bool
+--     , duration : Int
+--     }
+
+
 type alias Notify =
     { id : NotifyId
-    , name : String
-    , image : String
-    , tags : List String
+    , title : Title
+    , message : Message
+    , created : String
+    , pinned : Pinned
+    , archived : Bool
+    , duration : Int
     }
 
 
@@ -19,71 +59,35 @@ type alias Notify =
 
 type Route
     = NotifiesRoute
-    | NotifyRoute NotifyId
+    | NotifyAddRoute
     | NotifyEditRoute NotifyId
     | NotFoundRoute
 
 
 notifies : List Notify
 notifies =
-    [ { id = 1
-      , name = "Elm"
-      , image = "elm"
-      , tags = [ "functional", "browser", "static" ]
+    [ { title = "欢迎使用 elm 前端框架`1`"
+      , pinned = False
+      , message = "23333, 66666,1"
+      , id = 1
+      , duration = 999984
+      , created = "2016-08-14T08:14:43+00:00"
+      , archived = False
       }
-    , { id = 2
-      , name = "JavaScript"
-      , image = "js"
-      , tags = [ "functional", "oo", "browser", "dynamic", "prototypical" ]
+    , { title = "欢迎使用 elm 前端框架`2`"
+      , pinned = True
+      , message = "23333, 66666,2"
+      , id = 2
+      , duration = 999984
+      , created = "2016-08-14T08:14:43+00:00"
+      , archived = False
       }
-    , { id = 3
-      , name = "Go"
-      , image = "go"
-      , tags = [ "oo", "google", "static" ]
-      }
-    , { id = 4
-      , name = "Rust"
-      , image = "rust"
-      , tags = [ "functional", "mozilla", "static" ]
-      }
-    , { id = 5
-      , name = "Elixir"
-      , image = "elixir"
-      , tags = [ "functional", "erlang", "dynamic" ]
-      }
-    , { id = 6
-      , name = "Ruby"
-      , image = "ruby"
-      , tags = [ "oo", "japan", "1996", "dynamic", "classical" ]
-      }
-    , { id = 7
-      , name = "Python"
-      , image = "python"
-      , tags = [ "oo", "dynamic", "classical" ]
-      }
-    , { id = 8
-      , name = "Swift"
-      , image = "swift"
-      , tags = [ "functional", "apple", "static", "classical" ]
-      }
-    , { id = 9
-      , name = "Haskell"
-      , image = "haskell"
-      , tags = [ "functional", "static" ]
-      }
-    , { id = 10
-      , name = "Java"
-      , image = "java"
-      , tags = [ "oo", "static", "classical" ]
-      }
-    , { id = 11
-      , name = "C#"
-      , image = "csharp"
-      , tags = [ "oo", "microsoft", "static", "classical" ]
-      }
-    , { id = 12
-      , name = "PHP"
-      , image = "php"
-      , tags = [ "oo", "server", "1994", "dynamic", "classical" ]
+    , { title = "欢迎使用 elm 前端框架`3`"
+      , pinned = True
+      , message = "23333, 66666,3"
+      , id = 3
+      , duration = 999984
+      , created = "2016-08-14T08:14:43+00:00"
+      , archived = True
       }
     ]

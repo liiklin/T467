@@ -10,9 +10,9 @@ matcherNotifies =
     match1 NotifiesRoute ""
 
 
-matcherNotify : PathMatcher Route
-matcherNotify =
-    match2 NotifyRoute "/" int
+matcherNotifyAdd : PathMatcher Route
+matcherNotifyAdd =
+    match1 NotifyAddRoute "/add"
 
 
 matcherNotifyEdit : PathMatcher Route
@@ -22,4 +22,7 @@ matcherNotifyEdit =
 
 matchers : List (PathMatcher Route)
 matchers =
-    [ matcherNotifies, matcherNotify, matcherNotifyEdit ]
+    [ matcherNotifies
+    , matcherNotifyAdd
+    , matcherNotifyEdit
+    ]

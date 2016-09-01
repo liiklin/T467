@@ -51,16 +51,6 @@ update message model =
             in
                 ( { model | notifies = updatedModel.notifies }, Cmd.map NotifiesMsg cmd )
 
-        SetQuery query ->
-            let
-                command =
-                    model.location
-                        |> setQuery query
-                        |> makeUrlFromLocation routerConfig
-                        |> Navigation.newUrl
-            in
-                ( model, command )
-
         ShowNotifies ->
             let
                 path =
