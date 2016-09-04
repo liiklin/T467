@@ -73,4 +73,10 @@ pageView model =
 
 notFoundView : AppModel -> Html msg
 notFoundView model =
-    div [ class "row" ] [ div [ class "col-md-12" ] [ span [] [ text "没有找到对应的页面" ] ] ]
+    div [ class "row" ]
+        [ div [ class "col-md-12" ]
+            [ span []
+                [ text "没有找到对应的页面"
+                ]
+            ]
+        ]

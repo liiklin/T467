@@ -9,6 +9,7 @@ import Models
 import Notifies.Models exposing (..)
 import Notifies.Messages exposing (Msg(..))
 import Notifies.Routing.Utils
+import Notifies.Api exposing (getArtists)
 
 
 type alias UpdateModel =
@@ -25,6 +26,11 @@ routerConfig =
 navigationCmd : String -> Cmd a
 navigationCmd path =
     Navigation.modifyUrl (makeUrl Routing.Config.config path)
+
+
+mountNewAlbumCmd : Cmd Msg
+mountNewAlbumCmd =
+    getArtists FetchNotifiesFailed HandleNotifiesRetrieved
 
 
 update : Msg -> UpdateModel -> ( UpdateModel, Cmd Msg )
@@ -61,9 +67,7 @@ update message model =
                 updatedNotifies =
                     List.map (updatePinnedWithId id "pinned" True) model.notifies
             in
-                ( { model | notifies = updatedNotifies }
-                , Cmd.none
-                )
+                ( { model | notifies = updatedNotifies }, Cmd.none )
 
         CancelTop id ->
             let
@@ -81,24 +85,13 @@ update message model =
             in
                 ( { model | notifies = updatedNotifies }, Cmd.none )
 
+        FetchNotifiesFailed err ->
+            ( model, Cmd.none )
 
-
--- FormInput inputId val ->
---     let
---         res =
---             case inputId of
---                 Ltitle ->
---                     { model | title = val }
---
---                 Lmessage ->
---                     { model | message = val }
---     in
---         { res | errmsg = "" } ! []
--- SaveAdd notify ->
---     let
---         updatedNotifies = {model.notifies | }
---     in
---         ( { model | notifies = updatedNotifies }, Cmd.none )
+        HandleNotifiesRetrieved notifies' ->
+            ( { model | notifies = notifies' }
+            , Cmd.none
+            )
 
 
 updateWithId : NotifyId -> String -> String -> Notify -> Notify

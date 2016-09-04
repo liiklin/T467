@@ -1,6 +1,7 @@
 module Notifies.Messages exposing (..)
 
 import Notifies.Models exposing (..)
+import Http
 
 
 type alias Prop =
@@ -19,10 +20,5 @@ type Msg
     | SetTop NotifyId
     | Update NotifyId Prop Value
     | Cancel
-    -- | FormInput Field String
-    -- | FormCheck Field Bool
-
-
-
--- | SaveAdd Notify
--- | SaveEdit Notify
+    | FetchNotifiesFailed Http.Error
+    | HandleNotifiesRetrieved (List Notify)

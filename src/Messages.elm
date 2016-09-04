@@ -1,6 +1,5 @@
 module Messages exposing (..)
 
-import Hop.Types exposing (Location, Query)
 import Faqs.Messages
 import Notifies.Messages
 

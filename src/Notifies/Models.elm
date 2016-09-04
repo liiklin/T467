@@ -23,25 +23,6 @@ type Field
     | Lpinned
 
 
-type alias NewNotify =
-    { title : Title
-    , message : Message
-    , pinned : Pinned
-    }
-
-
-
--- type alias NewNotify =
---     { id : NotifyId
---     , title : String
---     , message : String
---     , created : String
---     , pinned : Bool
---     , archived : Bool
---     , duration : Int
---     }
-
-
 type alias Notify =
     { id : NotifyId
     , title : Title
@@ -66,28 +47,28 @@ type Route
 
 notifies : List Notify
 notifies =
-    [ { title = "欢迎使用 elm 前端框架`1`"
-      , pinned = False
-      , message = "23333, 66666,1"
-      , id = 1
-      , duration = 999984
-      , created = "2016-08-14T08:14:43+00:00"
-      , archived = False
-      }
-    , { title = "欢迎使用 elm 前端框架`2`"
-      , pinned = True
-      , message = "23333, 66666,2"
-      , id = 2
-      , duration = 999984
-      , created = "2016-08-14T08:14:43+00:00"
-      , archived = False
-      }
-    , { title = "欢迎使用 elm 前端框架`3`"
-      , pinned = True
-      , message = "23333, 66666,3"
-      , id = 3
-      , duration = 999984
-      , created = "2016-08-14T08:14:43+00:00"
-      , archived = True
-      }
+    [-- { title = "欢迎使用 elm 前端框架`1`"
+     --   , pinned = False
+     --   , message = "23333, 66666,1"
+     --   , id = 1
+     --   , duration = 999984
+     --   , created = "2016-08-14T08:14:43+00:00"
+     --   , archived = False
+     --   }
+     -- , { title = "欢迎使用 elm 前端框架`2`"
+     --   , pinned = True
+     --   , message = "23333, 66666,2"
+     --   , id = 2
+     --   , duration = 999984
+     --   , created = "2016-08-14T08:14:43+00:00"
+     --   , archived = False
+     --   }
+     -- , { title = "欢迎使用 elm 前端框架`3`"
+     --   , pinned = True
+     --   , message = "23333, 66666,3"
+     --   , id = 3
+     --   , duration = 999984
+     --   , created = "2016-08-14T08:14:43+00:00"
+     --   , archived = True
+     --   }
     ]
