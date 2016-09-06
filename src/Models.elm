@@ -15,9 +15,10 @@ type alias AppModel =
     { notifies : List Notify
     , faqs : List Faq
     , location : Location
-    , route : Route
-    , selectedFaq : Maybe Faq
-    , selectedNotify : Maybe Notify
+    , route :
+        Route
+        -- , selectedFaq : Maybe Faq
+        -- , selectedNotify : Maybe Notify
     }
 
 
@@ -26,7 +27,8 @@ newAppModel route location =
     { notifies = notifies
     , faqs = faqs
     , location = location
-    , route = route
-    , selectedFaq = Maybe.Nothing
-    , selectedNotify = Maybe.Nothing
+    , route =
+        route
+        -- , selectedFaq = Maybe.Nothing
+        -- , selectedNotify = Maybe.Nothing
     }

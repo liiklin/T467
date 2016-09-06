@@ -26,7 +26,7 @@ routerConfig =
 
 update : Msg -> AppModel -> ( AppModel, Cmd Msg )
 update message model =
-    case Debug.log "message" message of
+    case Debug.log "main message" message of
         FaqsMsg subMessage ->
             let
                 updateModel =
@@ -56,7 +56,9 @@ update message model =
                 path =
                     Routing.Utils.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
             in
-                ( model, navigationCmd path )
+                ( model
+                , navigationCmd path
+                )
 
         ShowFaqs ->
             let

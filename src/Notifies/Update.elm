@@ -9,7 +9,7 @@ import Models
 import Notifies.Models exposing (..)
 import Notifies.Messages exposing (Msg(..))
 import Notifies.Routing.Utils
-import Notifies.Api exposing (getArtists)
+import Notifies.Api exposing (getNotifies)
 
 
 type alias UpdateModel =
@@ -28,14 +28,14 @@ navigationCmd path =
     Navigation.modifyUrl (makeUrl Routing.Config.config path)
 
 
-mountNewAlbumCmd : Cmd Msg
-mountNewAlbumCmd =
-    getArtists FetchNotifiesFailed HandleNotifiesRetrieved
+mountNotifiesCmd : Cmd Msg
+mountNotifiesCmd =
+    getNotifies FetchNotifiesFailed HandleNotifiesRetrieved
 
 
 update : Msg -> UpdateModel -> ( UpdateModel, Cmd Msg )
 update message model =
-    case Debug.log "message" message of
+    case Debug.log "notifise message" message of
         Add ->
             ( model
             , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifyAddRoute)
@@ -84,6 +84,9 @@ update message model =
                     List.map (updateWithId id prop value) model.notifies
             in
                 ( { model | notifies = updatedNotifies }, Cmd.none )
+
+        ShowNotifies ->
+            ( model, mountNotifiesCmd )
 
         FetchNotifiesFailed err ->
             ( model, Cmd.none )

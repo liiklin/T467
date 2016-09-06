@@ -1,7 +1,7 @@
 module Notifies.Api exposing (..)
 
 import Json.Decode as JsonD exposing ((:=))
-import Json.Encode as JsonE
+-- import Json.Encode as JsonE
 import Http
 import Task
 import Notifies.Models exposing (..)
@@ -9,22 +9,22 @@ import Notifies.Models exposing (..)
 
 baseUrl : String
 baseUrl =
-    "http://www.zhiyisoft.com:30240"
+    "http://127.0.0.1/api/v1"
 
 
-getArtists : (Http.Error -> msg) -> (List Notify -> msg) -> Cmd msg
-getArtists errorMsg msg =
-    Http.get artistsDecoder (baseUrl ++ "/notifications")
+getNotifies : (Http.Error -> msg) -> (List Notify -> msg) -> Cmd msg
+getNotifies errorMsg msg =
+    Http.get notifiesDecoder (baseUrl ++ "/notifications")
         |> Task.perform errorMsg msg
 
 
-artistsDecoder : JsonD.Decoder (List Notify)
-artistsDecoder =
-    JsonD.list artistDecoder
+notifiesDecoder : JsonD.Decoder (List Notify)
+notifiesDecoder =
+    JsonD.list notifyDecoder
 
 
-artistDecoder : JsonD.Decoder Notify
-artistDecoder =
+notifyDecoder : JsonD.Decoder Notify
+notifyDecoder =
     JsonD.object7 Notify
         ("id" := JsonD.int)
         ("title" := JsonD.string)

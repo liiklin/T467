@@ -20,8 +20,14 @@ urlUpdate ( route, location ) model =
     let
         _ =
             Debug.log "urlUpdate location" location
+
+        ( initModel, initCmds ) =
+            case route of
+                Notifies ->
+                    Update.Notifies.update (Faq.FetchIndex) model.faqModel
     in
-        ( { model | route = route, location = location }, Cmd.none )
+        { model | route = route, location = location }
+            ! [ initCmds ]
 
 
 init : ( Route, Hop.Types.Location ) -> ( AppModel, Cmd Msg )

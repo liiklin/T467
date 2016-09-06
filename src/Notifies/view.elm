@@ -29,6 +29,10 @@ view model =
         ]
 
 
+
+-- 按钮
+
+
 menuBtnView : ViewModel -> Html Msg
 menuBtnView model =
     case model.route of
@@ -43,6 +47,10 @@ menuBtnView model =
 
         NotFoundRoute ->
             button [ class "btn btn-default", onClick Add ] [ text "发布新通知" ]
+
+
+
+-- 列表视图
 
 
 subView : ViewModel -> Html Msg

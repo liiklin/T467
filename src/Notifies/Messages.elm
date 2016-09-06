@@ -20,5 +20,6 @@ type Msg
     | SetTop NotifyId
     | Update NotifyId Prop Value
     | Cancel
+    | ShowNotifies
     | FetchNotifiesFailed Http.Error
     | HandleNotifiesRetrieved (List Notify)
