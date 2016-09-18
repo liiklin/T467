@@ -12,7 +12,7 @@ import Faqs.Routing
 
 type alias UpdateModel =
     { faqs : List Faq
-    , location : Address
+    , address : Address
     }
 
 
@@ -55,7 +55,7 @@ update message model =
         AddQuery query ->
             let
                 command =
-                    model.location
+                    model.address
                         |> addQuery query
                         |> output routerConfig
                         |> Navigation.modifyUrl
@@ -65,7 +65,7 @@ update message model =
         SetQuery query ->
             let
                 command =
-                    model.location
+                    model.address
                         |> setQuery query
                         |> output routerConfig
                         |> Navigation.modifyUrl

@@ -13,7 +13,7 @@ import Notifies.Routing
 
 type alias UpdateModel =
     { notifies : List Notify
-    , location : Address
+    , address : Address
     }
 
 

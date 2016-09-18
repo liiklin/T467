@@ -17,7 +17,7 @@ urlParser =
         parse path =
             path
                 |> UrlParser.parse identity Routing.routes
-                |> Result.withDefault Home
+                |> Result.withDefault NotFoundRoute
 
         matcher =
             Hop.makeResolver Routing.config parse

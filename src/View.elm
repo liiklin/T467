@@ -52,7 +52,7 @@ pageView model =
                 viewModel =
                     { notifies = model.notifies
                     , route = notifiesRoute
-                    , location = model.location
+                    , address = model.address
                     }
             in
                 Html.App.map NotifiesMsg (Notifies.View.view viewModel)
@@ -62,7 +62,7 @@ pageView model =
                 viewModel =
                     { faqs = model.faqs
                     , route = faqsRoute
-                    , location = model.location
+                    , address = model.address
                     }
             in
                 Html.App.map FaqsMsg (Faqs.View.view viewModel)

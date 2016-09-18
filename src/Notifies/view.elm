@@ -13,7 +13,7 @@ import Notifies.List
 
 type alias ViewModel =
     { notifies : List Notify
-    , location : Address
+    , address : Address
     , route : Route
     }
 
@@ -25,7 +25,7 @@ view model =
         , div [ class "col-md-12", style [ ( "height", "20px" ) ] ] []
         , subView model
         , div [ class "col-md-12", style [ ( "height", "30px" ) ] ] []
-        , Notifies.List.view { notifies = model.notifies, location = model.location }
+        , Notifies.List.view { notifies = model.notifies, address = model.address }
         ]
 
 

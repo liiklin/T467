@@ -12,7 +12,7 @@ import Date
 
 type alias ViewModel =
     { notifies : List Notify
-    , location : Address
+    , address : Address
     }
 
 

@@ -32,7 +32,7 @@ update message model =
             let
                 updateModel =
                     { faqs = model.faqs
-                    , location = model.location
+                    , address = model.address
                     }
 
                 ( updatedModel, cmd ) =
@@ -48,7 +48,7 @@ update message model =
             let
                 updateModel =
                     { notifies = model.notifies
-                    , location = model.location
+                    , address = model.address
                     }
 
                 ( updatedModel, cmd ) =

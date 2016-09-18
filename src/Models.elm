@@ -6,8 +6,7 @@ import Notifies.Models exposing (Notify, notifies)
 
 
 type Route
-    = Home
-    | NotifiesRoutes Notifies.Models.Route
+    = NotifiesRoutes Notifies.Models.Route
     | FaqsRoutes Faqs.Models.Route
     | NotFoundRoute
 
@@ -21,9 +20,9 @@ type alias AppModel =
 
 
 newAppModel : Route -> Address -> AppModel
-newAppModel route location =
+newAppModel route address =
     { notifies = notifies
     , faqs = faqs
-    , address = location
+    , address = address
     , route = route
     }

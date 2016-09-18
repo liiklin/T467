@@ -10,7 +10,7 @@ import Faqs.Add
 
 type alias ViewModel =
     { faqs : List Faq
-    , location : Address
+    , address : Address
     , route : Route
     }
 
@@ -20,7 +20,7 @@ view model =
     div []
         [ div [ class "col-md-12" ] [ button [ class "btn btn-default" ] [ text "发布新FAQ" ] ]
         , div [ class "col-md-12", style [ ( "height", "20px" ) ] ] []
-        -- , Faqs.Add.view { faqs = model.faqs, location = model.location }
+        -- , Faqs.Add.view { faqs = model.faqs, address = model.address }
         , div [ class "col-md-12", style [ ( "height", "30px" ) ] ] []
         , div [ class "col-md-12" ]
             [ table [ class "table table-hover" ]
