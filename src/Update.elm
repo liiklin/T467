@@ -37,7 +37,11 @@ update message model =
                 ( updatedModel, cmd ) =
                     Faqs.Update.update subMessage updateModel
             in
-                ( { model | faqs = updatedModel.faqs }, Cmd.map FaqsMsg cmd )
+                ( { model
+                    | faqs = updatedModel.faqs
+                  }
+                , Cmd.map FaqsMsg cmd
+                )
 
         NotifiesMsg subMessage ->
             let
@@ -49,16 +53,19 @@ update message model =
                 ( updatedModel, cmd ) =
                     Notifies.Update.update subMessage updateModel
             in
-                ( { model | notifies = updatedModel.notifies }, Cmd.map NotifiesMsg cmd )
+                ( { model
+                    | notifies = updatedModel.notifies
+                  }
+                , Cmd.map NotifiesMsg cmd
+                  --  , Cmd.map NotifiesMsg Notifies.Update.mountNotifiesCmd
+                )
 
         ShowNotifies ->
             let
                 path =
                     Routing.Utils.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
             in
-                ( model
-                , navigationCmd path
-                )
+                ( model, navigationCmd path )
 
         ShowFaqs ->
             let
