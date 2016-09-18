@@ -19,7 +19,7 @@ type alias Faq =
 
 type Route
     = FaqsRoute
-    | FaqRoute FaqId
+    | FaqRoute
     | FaqEditRoute FaqId
     | NotFoundRoute
 

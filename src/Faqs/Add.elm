@@ -2,7 +2,7 @@ module Faqs.Add exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, placeholder, name, id, for, type', rows)
-import Hop.Types exposing (Location)
+import Hop.Types exposing (Address)
 import Dict
 import Faqs.Models exposing (..)
 import Faqs.Messages exposing (..)
@@ -10,7 +10,7 @@ import Faqs.Messages exposing (..)
 
 type alias ViewModel =
     { faqs : List Faq
-    , location : Location
+    , location : Address
     }
 
 

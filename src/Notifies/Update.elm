@@ -2,30 +2,31 @@ module Notifies.Update exposing (..)
 
 import Debug
 import Navigation
-import Hop exposing (makeUrl, makeUrlFromLocation, addQuery, setQuery)
-import Hop.Types exposing (Config, Location)
-import Routing.Config
-import Models
+import Hop exposing (output, outputFromPath, addQuery, setQuery)
+import Hop.Types exposing (Config, Address)
+import Routing
 import Notifies.Models exposing (..)
 import Notifies.Messages exposing (Msg(..))
-import Notifies.Routing.Utils
 import Notifies.Api exposing (getNotifies)
+import Notifies.Routing
 
 
 type alias UpdateModel =
     { notifies : List Notify
-    , location : Location
+    , location : Address
     }
 
 
-routerConfig : Config Models.Route
+routerConfig : Config
 routerConfig =
-    Routing.Config.config
+    Routing.config
 
 
 navigationCmd : String -> Cmd a
 navigationCmd path =
-    Navigation.modifyUrl (makeUrl Routing.Config.config path)
+    path
+        |> outputFromPath routerConfig
+        |> Navigation.modifyUrl
 
 
 mountNotifiesCmd : Cmd Msg
@@ -38,18 +39,18 @@ update message model =
     case Debug.log "notifise message" message of
         Add ->
             ( model
-            , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifyAddRoute)
+            , navigationCmd (Notifies.Routing.reverseWithPrefix NotifyAddRoute)
             )
 
         Cancel ->
             ( model
-            , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifiesRoute)
+            , navigationCmd (Notifies.Routing.reverseWithPrefix NotifiesRoute)
             )
 
         Edit id ->
             let
                 path =
-                    Notifies.Routing.Utils.reverseWithPrefix (Notifies.Models.NotifyEditRoute id)
+                    Notifies.Routing.reverseWithPrefix (Notifies.Models.NotifyEditRoute id)
             in
                 ( model, navigationCmd path )
 
@@ -59,7 +60,7 @@ update message model =
                     List.filter (\t -> t.id /= id) model.notifies
             in
                 ( { model | notifies = updatedNotifies }
-                , navigationCmd (Notifies.Routing.Utils.reverseWithPrefix NotifiesRoute)
+                , navigationCmd (Notifies.Routing.reverseWithPrefix NotifiesRoute)
                 )
 
         SetTop id ->

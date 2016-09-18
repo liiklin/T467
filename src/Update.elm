@@ -2,12 +2,11 @@ module Update exposing (..)
 
 import Debug
 import Navigation
-import Hop exposing (makeUrl, makeUrlFromLocation, setQuery)
-import Hop.Types
+import Hop exposing (output, outputFromPath, setQuery)
+import Hop.Types exposing (Config)
 import Messages exposing (..)
 import Models exposing (..)
-import Routing.Config
-import Routing.Utils
+import Routing
 import Notifies.Update
 import Notifies.Models
 import Faqs.Update
@@ -16,12 +15,14 @@ import Faqs.Models
 
 navigationCmd : String -> Cmd a
 navigationCmd path =
-    Navigation.newUrl (makeUrl Routing.Config.config path)
+    path
+        |> outputFromPath Routing.config
+        |> Navigation.newUrl
 
 
-routerConfig : Hop.Types.Config Route
+routerConfig : Config
 routerConfig =
-    Routing.Config.config
+    Routing.config
 
 
 update : Msg -> AppModel -> ( AppModel, Cmd Msg )
@@ -57,19 +58,18 @@ update message model =
                     | notifies = updatedModel.notifies
                   }
                 , Cmd.map NotifiesMsg cmd
-                  --  , Cmd.map NotifiesMsg Notifies.Update.mountNotifiesCmd
                 )
 
         ShowNotifies ->
             let
                 path =
-                    Routing.Utils.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
+                    Routing.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
             in
                 ( model, navigationCmd path )
 
         ShowFaqs ->
             let
                 path =
-                    Routing.Utils.reverse (FaqsRoutes Faqs.Models.FaqsRoute)
+                    Routing.reverse (FaqsRoutes Faqs.Models.FaqsRoute)
             in
                 ( model, navigationCmd path )

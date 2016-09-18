@@ -3,7 +3,7 @@ module Notifies.View exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
-import Hop.Types exposing (Location)
+import Hop.Types exposing (Address)
 import Notifies.Models exposing (NotifyId, Notify, Route, Route(..))
 import Notifies.Messages exposing (..)
 import Notifies.Add
@@ -13,7 +13,7 @@ import Notifies.List
 
 type alias ViewModel =
     { notifies : List Notify
-    , location : Location
+    , location : Address
     , route : Route
     }
 

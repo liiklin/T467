@@ -2,7 +2,6 @@ module Faqs.Messages exposing (..)
 
 import Dict
 import Faqs.Models exposing (..)
-import Hop.Types exposing (Config, Location, Query, Router, PathMatcher, newLocation)
 
 
 type alias Prop =
@@ -14,7 +13,7 @@ type alias Value =
 
 
 type Msg
-    = Show FaqId
+    = Show
     | Edit FaqId
     | Update FaqId Prop Value
     | AddQuery (Dict.Dict String String)
