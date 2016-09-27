@@ -1,23 +1,26 @@
 module Notifies.List exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, href, colspan)
-import Hop.Types exposing (Address)
-import Notifies.Models exposing (..)
+import Html.Events exposing (onClick)
 import Notifies.Messages exposing (..)
+import Notifies.Models exposing (Notify)
 import Date.Format
 import Date
 
 
-type alias ViewModel =
-    { notifies : List Notify
-    , address : Address
-    }
+view : List Notify -> Html Msg
+view notifies =
+    div [ class "col-md-12" ]
+        [ div [ class "col-md-12" ]
+            [ div [ class "col-md-12" ] [ actionBtn AddNotify "btn btn-default" "发布新通知" ]
+            , list notifies
+            ]
+        ]
 
 
-view : ViewModel -> Html Msg
-view model =
+list : List Notify -> Html Msg
+list notifies =
     div [ class "col-md-12" ]
         [ table [ class "table table-hover" ]
             [ thead []
@@ -28,22 +31,13 @@ view model =
                     , th [] [ text "操作" ]
                     ]
                 ]
-            , tbody [] (tableRows (model.notifies))
+            , tbody [] (List.map notifiesRow notifies)
             ]
         ]
 
 
-tableRows : List Notify -> List (Html Msg)
-tableRows collection =
-    if List.length collection > 0 then
-        List.map rowView collection
-    else
-        [ notRowView
-        ]
-
-
-rowView : Notify -> Html Msg
-rowView notify =
+notifiesRow : Notify -> Html Msg
+notifiesRow notify =
     tr []
         [ td [] [ text notify.title ]
         , td []
@@ -52,19 +46,19 @@ rowView notify =
                     [ text "已置顶" ]
                else
                 span [ class "label label-warning" ]
-                    [ text "取消置顶" ]
+                    [ text "未置顶" ]
               )
             ]
         , td [] [ text (Result.withDefault "0000/00/00" (stringToDate notify.created)) ]
         , td []
             [ div [ class "btn-group" ]
                 [ (if notify.pinned then
-                    actionBtn (CancelTop notify.id) "btn btn-default btn-xs" "取消置顶"
+                    actionBtn (ChangeTop notify.id False) "btn btn-default btn-xs" "取消置顶"
                    else
-                    actionBtn (SetTop notify.id) "btn btn-default btn-xs" "设置置顶"
+                    actionBtn (ChangeTop notify.id True) "btn btn-default btn-xs" "设置置顶"
                   )
-                , actionBtn (Edit notify.id) "btn btn-default btn-xs" "编辑"
-                , actionBtn (Delete notify.id) "btn btn-danger btn-xs" "删除"
+                , actionBtn (EditNotify notify.id) "btn btn-default btn-xs" "编辑"
+                , actionBtn (DeleteNotify notify.id) "btn btn-danger btn-xs" "删除"
                 ]
             ]
         ]

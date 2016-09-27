@@ -1,50 +1,43 @@
 module Main exposing (..)
 
 import Navigation
-import Hop
-import Hop.Types exposing (Address)
-import Messages exposing (..)
-import Models exposing (..)
-import Update exposing (..)
-import View exposing (..)
-import Routing
-import UrlParser
+import Messages exposing (Msg(..))
+import Models exposing (Model, initialModel)
+import View exposing (view)
+import Update exposing (update)
+import Notifies.Commands exposing (fetchAll)
+import Routing exposing (Route)
 
 
-urlParser : Navigation.Parser ( Route, Address )
-urlParser =
+init : Result String Route -> ( Model, Cmd Msg )
+init result =
     let
-        parse path =
-            path
-                |> UrlParser.parse identity Routing.routes
-                |> Result.withDefault NotFoundRoute
-
-        matcher =
-            Hop.makeResolver Routing.config parse
+        currentRoute =
+            Routing.routeFromResult result
     in
-        Navigation.makeParser (.href >> matcher)
+        ( initialModel currentRoute, Cmd.map NotifiesMsg fetchAll )
 
 
-urlUpdate : ( Route, Address ) -> AppModel -> ( AppModel, Cmd Msg )
-urlUpdate ( route, address ) model =
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
+urlUpdate : Result String Route -> Model -> ( Model, Cmd Msg )
+urlUpdate result model =
     let
-        _ =
-            Debug.log "urlUpdate address" address
+        currentRoute =
+            Routing.routeFromResult result
     in
-        ( { model | route = route, address = address }, Cmd.none )
-
-
-init : ( Route, Address ) -> ( AppModel, Cmd Msg )
-init ( route, address ) =
-    ( newAppModel route address, Cmd.none )
+        ( { model | route = currentRoute }, Cmd.none )
 
 
 main : Program Never
 main =
-    Navigation.program urlParser
+    Navigation.program Routing.parser
         { init = init
         , view = view
         , update = update
         , urlUpdate = urlUpdate
-        , subscriptions = (always Sub.none)
+        , subscriptions = subscriptions
         }

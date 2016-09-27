@@ -1,39 +1,45 @@
 module Routing exposing (..)
 
-import Models exposing (..)
-import Hop.Types exposing (Config)
-import UrlParser exposing ((</>), oneOf, int, s)
-import Notifies.Routing
-import Faqs.Routing
+import String
+import Navigation
+import UrlParser exposing (..)
+import Notifies.Models exposing (NotifyId)
 
 
-matchers : List (UrlParser.Parser (Route -> a) a)
+type Route
+    = NotifiesRoute
+    | AddNotifyRoute
+    | NotifyRoute NotifyId
+    | NotFoundRoute
+
+
+matchers : Parser (Route -> a) a
 matchers =
-    [ UrlParser.format NotifiesRoutes (s "notifications" </> (oneOf Notifies.Routing.matchers))
-    , UrlParser.format FaqsRoutes (s "faqs" </> (oneOf Faqs.Routing.matchers))
-    ]
+    oneOf
+        [ format NotifiesRoute (s "")
+        , format AddNotifyRoute (s "notifications" </> s "new")
+        , format NotifyRoute (s "notifications" </> int)
+        , format NotifiesRoute (s "notifications")
+        ]
 
 
-routes : UrlParser.Parser (Route -> a) a
-routes =
-    oneOf matchers
+hashParser : Navigation.Location -> Result String Route
+hashParser location =
+    location.hash
+        |> String.dropLeft 1
+        |> parse identity matchers
 
 
-config : Config
-config =
-    { basePath = ""
-    , hash = True
-    }
+parser : Navigation.Parser (Result String Route)
+parser =
+    Navigation.makeParser hashParser
 
 
-reverse : Route -> String
-reverse route =
-    case Debug.log "main route" route of
-        NotifiesRoutes subRoute ->
-            "notifications" ++ Notifies.Routing.reverse subRoute
+routeFromResult : Result String Route -> Route
+routeFromResult result =
+    case result of
+        Ok route ->
+            route
 
-        FaqsRoutes subRoute ->
-            "faqs" ++ Faqs.Routing.reverse subRoute
-
-        NotFoundRoute ->
-            ""
+        Err string ->
+            NotFoundRoute

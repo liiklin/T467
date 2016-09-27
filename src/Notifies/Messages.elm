@@ -1,25 +1,24 @@
 module Notifies.Messages exposing (..)
 
-import Notifies.Models exposing (..)
 import Http
-
-
-type alias Prop =
-    String
-
-
-type alias Value =
-    String
+import Notifies.Models exposing (NotifyId, Notify)
 
 
 type Msg
-    = Add
-    | Delete NotifyId
-    | Edit NotifyId
-    | CancelTop NotifyId
-    | SetTop NotifyId
-    | Update NotifyId Prop Value
-    | Cancel
+    = FetchAllDone (List Notify)
+    | FetchAllFail Http.Error
+    | AddNotify
     | ShowNotifies
-    | FetchNotifiesFailed Http.Error
-    | HandleNotifiesRetrieved (List Notify)
+    | EditNotify NotifyId
+    | DeleteNotify NotifyId
+    | ChangeTop NotifyId Bool
+    | SaveNotify Notify
+    | SaveSuccess Notify
+    | DeleteSuccess Notify
+    | SaveFail Http.Error
+    -- | FormInput Field String
+
+type Field
+  = Ltitle
+  | Lmessage
+  | Lpinned

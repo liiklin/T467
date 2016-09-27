@@ -1,124 +1,112 @@
 module Notifies.Update exposing (..)
 
-import Debug
+import Notifies.Messages exposing (..)
+import Notifies.Models exposing (Notify, NotifyId, Pinned)
+import Notifies.Commands exposing (save)
 import Navigation
-import Hop exposing (output, outputFromPath, addQuery, setQuery)
-import Hop.Types exposing (Config, Address)
-import Routing
-import Notifies.Models exposing (..)
-import Notifies.Messages exposing (Msg(..))
-import Notifies.Api exposing (getNotifies)
-import Notifies.Routing
 
 
-type alias UpdateModel =
-    { notifies : List Notify
-    , address : Address
-    }
+changeTopCommands : NotifyId -> Bool -> List Notify -> List (Cmd Msg)
+changeTopCommands notifyId pinned =
+    let
+        cmdForNotify existingNotify =
+            if existingNotify.id == notifyId then
+                save { existingNotify | pinned = pinned } "PUT"
+            else
+                Cmd.none
+    in
+        List.map cmdForNotify
 
 
-routerConfig : Config
-routerConfig =
-    Routing.config
+updateNotify : Notify -> String -> List Notify -> List Notify
+updateNotify updatedNotify opt =
+    if opt == "save" then
+        let
+            select existingNotify =
+                if existingNotify.id == updatedNotify.id then
+                    updatedNotify
+                else
+                    existingNotify
+        in
+            List.map select
+    else
+        List.filter (\t -> t.id /= updatedNotify.id)
 
 
-navigationCmd : String -> Cmd a
-navigationCmd path =
-    path
-        |> outputFromPath routerConfig
-        |> Navigation.modifyUrl
+deleteNotify : NotifyId -> List Notify -> List (Cmd Msg)
+deleteNotify notifyId =
+    let
+        cmdForNotify existingNotify =
+            if existingNotify.id == notifyId then
+                save { existingNotify | pinned = existingNotify.pinned } "DELETE"
+            else
+                Cmd.none
+    in
+        List.map cmdForNotify
 
 
-mountNotifiesCmd : Cmd Msg
-mountNotifiesCmd =
-    getNotifies FetchNotifiesFailed HandleNotifiesRetrieved
+saveNotify : NotifyId -> Notify -> String -> List Notify -> List (Cmd Msg)
+saveNotify notifyId notify opt =
+    let
+        _ =
+            Debug.log "notify" notify
+
+        cmdForNotify existingNotify =
+            if existingNotify.id == notifyId then
+                save { existingNotify | pinned = notify.pinned } opt
+            else
+                Cmd.none
+    in
+        List.map cmdForNotify
 
 
-update : Msg -> UpdateModel -> ( UpdateModel, Cmd Msg )
-update message model =
-    case Debug.log "notifise message" message of
-        Add ->
-            ( model
-            , navigationCmd (Notifies.Routing.reverseWithPrefix NotifyAddRoute)
-            )
+update : Msg -> List Notify -> ( List Notify, Cmd Msg )
+update message notifies =
+    case Debug.log "update message" message of
+        FetchAllDone newNotifies ->
+            ( newNotifies, Cmd.none )
 
-        Cancel ->
-            ( model
-            , navigationCmd (Notifies.Routing.reverseWithPrefix NotifiesRoute)
-            )
+        FetchAllFail error ->
+            ( notifies, Cmd.none )
 
-        Edit id ->
-            let
-                path =
-                    Notifies.Routing.reverseWithPrefix (Notifies.Models.NotifyEditRoute id)
-            in
-                ( model, navigationCmd path )
-
-        Delete id ->
-            let
-                updatedNotifies =
-                    List.filter (\t -> t.id /= id) model.notifies
-            in
-                ( { model | notifies = updatedNotifies }
-                , navigationCmd (Notifies.Routing.reverseWithPrefix NotifiesRoute)
-                )
-
-        SetTop id ->
-            let
-                updatedNotifies =
-                    List.map (updatePinnedWithId id "pinned" True) model.notifies
-            in
-                ( { model | notifies = updatedNotifies }, Cmd.none )
-
-        CancelTop id ->
-            let
-                updatedNotifies =
-                    List.map (updatePinnedWithId id "pinned" False) model.notifies
-            in
-                ( { model | notifies = updatedNotifies }
-                , Cmd.none
-                )
-
-        Update id prop value ->
-            let
-                updatedNotifies =
-                    List.map (updateWithId id prop value) model.notifies
-            in
-                ( { model | notifies = updatedNotifies }, Cmd.none )
+        AddNotify ->
+            ( notifies, Navigation.newUrl "#notifications/new" )
 
         ShowNotifies ->
-            ( model, mountNotifiesCmd )
+            ( notifies, Navigation.newUrl "#notifications" )
 
-        FetchNotifiesFailed err ->
-            ( model, Cmd.none )
+        -- FormInput fieldId val ->
+        --     let
+        --         res =
+        --             case fieldId of
+        --                 Ltitle ->
+        --                     { Notify.Models.notify | title = val }
+        --
+        --                 Lmessage ->
+        --                     { Notify.Models.notify | message = val }
+        --
+        --                 Lpinned ->
+        --                     { Notify.Models.notify | pinned = True }
+        --     in
+        --         (res | res) ! []
 
-        HandleNotifiesRetrieved notifies' ->
-            ( { model | notifies = notifies' }
-            , Cmd.none
-            )
+        EditNotify id ->
+            ( notifies, Navigation.newUrl ("#notifications/" ++ (toString id)) )
 
+        ChangeTop id pinned ->
+            ( notifies, changeTopCommands id pinned notifies |> Cmd.batch )
 
-updateWithId : NotifyId -> String -> String -> Notify -> Notify
-updateWithId id prop value notify =
-    if id == notify.id then
-        case prop of
-            "title" ->
-                { notify | title = value }
+        SaveNotify notify ->
+            ( notifies, saveNotify notify.id notify "PUT" notifies |> Cmd.batch )
 
-            _ ->
-                notify
-    else
-        notify
+        DeleteNotify id ->
+            ( notifies, deleteNotify id notifies |> Cmd.batch )
 
+        SaveSuccess updatedNotify ->
+            ( updateNotify updatedNotify "save" notifies, Cmd.none )
 
-updatePinnedWithId : NotifyId -> String -> Bool -> Notify -> Notify
-updatePinnedWithId id prop value notify =
-    if id == notify.id then
-        case prop of
-            "pinned" ->
-                { notify | pinned = value }
+        DeleteSuccess updatedNotify ->
+            ( updateNotify updatedNotify "delete" notifies, Cmd.none )
 
-            _ ->
-                notify
-    else
-        notify
+        SaveFail error ->
+            ( notifies, Cmd.none )

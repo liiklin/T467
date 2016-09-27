@@ -1,82 +1,64 @@
 module View exposing (..)
 
-import Html exposing (..)
-import Html.App
-import Html.Events exposing (onClick)
+import Html exposing (Html, div, text, span, button)
 import Html.Attributes exposing (id, class, href, style)
-import Models exposing (..)
-import Messages exposing (..)
-import Faqs.View
-import Notifies.View
+import Html.Events exposing (onClick)
+import Html.App
+import Messages exposing (Msg(..))
+import Models exposing (Model)
+import Notifies.Add
+import Notifies.List
+import Notifies.Edit
+import Notifies.Models exposing (NotifyId)
+import Routing exposing (Route(..))
 
 
-view : AppModel -> Html Msg
+view : Model -> Html Msg
 view model =
-    div
-        [ class "container" ]
-        [ menu model
-        , div [ style [ ( "padding-top", "20px" ) ] ] []
-        , pageView model
+    div [ class "container" ]
+        [ div [ class "col-md-12", style [ ( "height", "30px" ) ] ] []
+        , div [ class "col-md-12" ] [ listView model ]
         ]
 
 
-menu : AppModel -> Html Msg
-menu model =
-    div [ class "row" ]
-        [ div [ class "col-md-12" ]
-            [ ul [ class "nav nav-pills" ]
-                [ menuLink ShowNotifies "btnNotifies" "通知公告" ""
-                , menuLink ShowFaqs "btnFaq" "常见问题(FAQ)" ""
-                ]
-            ]
-        ]
+listView : Model -> Html Msg
+listView model =
+    case Debug.log "model.route" model.route of
+        NotifiesRoute ->
+            Html.App.map NotifiesMsg (Notifies.List.view model.notifies)
 
+        NotifyRoute id ->
+            notifyEditPage model id
 
-menuLink : Msg -> String -> String -> String -> Html Msg
-menuLink message viewId label active =
-    li [ class active ]
-        [ a
-            [ id viewId
-            , href "javascript://"
-            , onClick message
-            ]
-            [ text label ]
-        ]
-
-
-pageView : AppModel -> Html Msg
-pageView model =
-    case model.route of
-        NotifiesRoutes notifiesRoute ->
-            let
-                viewModel =
-                    { notifies = model.notifies
-                    , route = notifiesRoute
-                    , address = model.address
-                    }
-            in
-                Html.App.map NotifiesMsg (Notifies.View.view viewModel)
-
-        FaqsRoutes faqsRoute ->
-            let
-                viewModel =
-                    { faqs = model.faqs
-                    , route = faqsRoute
-                    , address = model.address
-                    }
-            in
-                Html.App.map FaqsMsg (Faqs.View.view viewModel)
+        AddNotifyRoute ->
+            Html.App.map NotifiesMsg (Notifies.Add.view Notifies.Models.notify)
 
         NotFoundRoute ->
-            notFoundView model
+            notFoundView
 
 
-notFoundView : AppModel -> Html msg
-notFoundView model =
+notifyEditPage : Model -> NotifyId -> Html Msg
+notifyEditPage model notifyId =
+    let
+        maybeNotify =
+            model.notifies
+                |> List.filter (\notify -> notify.id == notifyId)
+                |> List.head
+    in
+        case maybeNotify of
+            Just notify ->
+                Html.App.map NotifiesMsg (Notifies.Edit.view notify)
+
+            Nothing ->
+                Html.App.map NotifiesMsg (Notifies.List.view model.notifies)
+
+
+notFoundView : Html msg
+notFoundView =
     div [ class "row" ]
         [ div [ class "col-md-12" ]
             [ span []
-                [ text "没有找到对应的页面"
+                [ text "没有找到对应的页面2"
                 ]
             ]
         ]
