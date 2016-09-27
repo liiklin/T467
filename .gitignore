@@ -1,9 +1,4 @@
-.DS_Store
-elm-stuff
 node_modules
-elm.js
-documentation.json
-.vscode/tasks.json
-npm-debug.log
-.envrc
-tests.js
+elm-stuff
+dist
+test
