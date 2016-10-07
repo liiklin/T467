@@ -1,17 +1,34 @@
 module Models exposing (..)
 
-import Notifies.Models exposing (Notify)
-import Routing
+import Hop.Types exposing (Location, newLocation)
+import Faqs.Models exposing (Faq, faqs)
+import Notifies.Models exposing (Notify, notifies)
 
 
-type alias Model =
+type Route
+    = NotifiesRoutes Notifies.Models.Route
+    | FaqsRoutes Faqs.Models.Route
+    | NotFoundRoute
+
+
+type alias AppModel =
     { notifies : List Notify
-    , route : Routing.Route
+    , faqs : List Faq
+    , location : Location
+    , route :
+        Route
+        -- , selectedFaq : Maybe Faq
+        -- , selectedNotify : Maybe Notify
     }
 
 
-initialModel : Routing.Route -> Model
-initialModel route =
-    { notifies = []
-    , route = route
+newAppModel : Route -> Hop.Types.Location -> AppModel
+newAppModel route location =
+    { notifies = notifies
+    , faqs = faqs
+    , location = location
+    , route =
+        route
+        -- , selectedFaq = Maybe.Nothing
+        -- , selectedNotify = Maybe.Nothing
     }

@@ -1,16 +1,68 @@
 module Update exposing (..)
 
-import Messages exposing (Msg(..))
-import Models exposing (Model)
+import Debug
+import Navigation
+import Hop exposing (makeUrl, makeUrlFromLocation, setQuery)
+import Hop.Types
+import Messages exposing (..)
+import Models exposing (..)
+import Routing.Config
+import Routing.Utils
 import Notifies.Update
+import Notifies.Models
+import Faqs.Update
+import Faqs.Models
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        NotifiesMsg subMsg ->
+navigationCmd : String -> Cmd a
+navigationCmd path =
+    Navigation.newUrl (makeUrl Routing.Config.config path)
+
+
+routerConfig : Hop.Types.Config Route
+routerConfig =
+    Routing.Config.config
+
+
+update : Msg -> AppModel -> ( AppModel, Cmd Msg )
+update message model =
+    case Debug.log "main message" message of
+        FaqsMsg subMessage ->
             let
-                ( updatedNotifies, cmd ) =
-                    Notifies.Update.update subMsg model.notifies
+                updateModel =
+                    { faqs = model.faqs
+                    , location = model.location
+                    }
+
+                ( updatedModel, cmd ) =
+                    Faqs.Update.update subMessage updateModel
             in
-                ( { model | notifies = updatedNotifies }, Cmd.map NotifiesMsg cmd )
+                ( { model | faqs = updatedModel.faqs }, Cmd.map FaqsMsg cmd )
+
+        NotifiesMsg subMessage ->
+            let
+                updateModel =
+                    { notifies = model.notifies
+                    , location = model.location
+                    }
+
+                ( updatedModel, cmd ) =
+                    Notifies.Update.update subMessage updateModel
+            in
+                ( { model | notifies = updatedModel.notifies }, Cmd.map NotifiesMsg cmd )
+
+        ShowNotifies ->
+            let
+                path =
+                    Routing.Utils.reverse (NotifiesRoutes Notifies.Models.NotifiesRoute)
+            in
+                ( model
+                , navigationCmd path
+                )
+
+        ShowFaqs ->
+            let
+                path =
+                    Routing.Utils.reverse (FaqsRoutes Faqs.Models.FaqsRoute)
+            in
+                ( model, navigationCmd path )
